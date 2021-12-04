@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return 'Hello';
 // });
 
- 
+
 // Route::get('hello', 'App\Http\Controllers\UserController@index');
 
 // Route::get('users', 'App\Http\Controllers\UserController@index');
@@ -32,3 +33,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::apiResource('users', 'App\Http\Controllers\UserController');
 
 Route::apiResource('users', UserController::class);
+Route::post('login', 'App\Http\Controllers\AuthController@login');
