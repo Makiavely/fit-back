@@ -24,18 +24,6 @@ class UserController extends Controller
        return User::find($id);
    }
 
-/*   public function store(Request $request)
-   {
-       $user = User::create([
-           'first_name' => $request->input('first_name'),
-           'last_name' => $request->input('last_name'),
-           'email' => $request->input('email'),
-           'password' => Hash::make($request->input('password')),
-       ]);
-
-       return response($user, Response::HTTP_CREATED);
-   }*/
-
    public function store(UserCreateRequest $request)
    {
        $user = User::create($request->only('first_name', 'last_name', 'email') + [
@@ -44,20 +32,6 @@ class UserController extends Controller
 
        return response($user, Response::HTTP_CREATED);
    }
-
-/*   public function update(Request $request, $id)
-   {
-       $user = User::find($id);
-
-       $user -> update([
-           'first_name' => $request->input('first_name'),
-           'last_name' => $request->input('last_name'),
-           'email' => $request->input('email'),
-           'password' => Hash::make($request->input('password')),
-       ]);
-
-       return response($user, Response::HTTP_ACCEPTED);
-   }*/
 
    public function update(UserUpdateRequest $request, $id)
    {
@@ -74,4 +48,29 @@ class UserController extends Controller
 
        return response(null, Response::HTTP_NO_CONTENT);
    }
+
+    public function user()
+    {
+        return \Auth::user();
+    }
+
+    public function updateInfo(Request $request)
+    {
+        $user = \Auth::user();
+
+        $user->update($request->only('first_name', 'last_name', 'email'));
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = \Auth::user();
+
+        $user->update([
+            'password' => Hash::make($request->input('password'))
+        ]);
+
+        return response($user, Response::HTTP_ACCEPTED);
+    }
 }
