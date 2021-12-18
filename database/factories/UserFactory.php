@@ -22,12 +22,12 @@ class UserFactory extends Factory
         ];
     }
 
-    public function unverified()
+/*    public function unverified()  ЗАКОМИТИЛ ЭТУ ХУНЮ В 17 ЛЕКЦИИ, НАХ ОНА ВАЩЕ НУЖНА?
     {
         return $this->state(function (array $attributes) {
             return [
                 'email_verified_at' => null,
             ];
         });
-    }
+    }*/
 }
