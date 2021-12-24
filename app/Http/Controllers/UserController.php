@@ -18,9 +18,6 @@ class UserController extends Controller
 {
    public function index()
    {
-       /*return User::paginate();*/
-       /*return User::with('role')->paginate();*/
-
        $users = User::paginate();
 
        return UserResource::collection($users);
@@ -28,9 +25,6 @@ class UserController extends Controller
 
    public function show($id)
    {
-       /*return User::find($id);*/
-       /*return User::with('role')->find($id);*/
-
        $user = User::find($id);
 
        return new UserResource($user);
@@ -63,7 +57,14 @@ class UserController extends Controller
 
     public function user()
     {
-        return new UserResource(\Auth::user());
+        $user = \Auth::user();
+
+        /*return new UserResource(\Auth::user());*/
+        return (new UserResource($user))->additional([
+            'data' => [
+                'permissions' => $user->permissions()
+            ]
+        ]);
     }
 
     /*public function updateInfo(Request $request)*/
