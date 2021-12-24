@@ -13,6 +13,8 @@ class ProductController extends Controller
 {
     public function index()
     {
+        \Gate::authorize('view', 'products');
+
         $products = Product::paginate();
 
         return ProductResource::collection($products);
@@ -20,22 +22,14 @@ class ProductController extends Controller
 
     public function show($id)
     {
+        \Gate::authorize('view', 'products');
+
         return new ProductResource(Product::find($id));
     }
 
-    /*public function store(Request $request)*/
     public function store(ProductCreateRequest $request)
     {
-        /*$file = $request->file('image');
-        $name = Str::random(10);
-        $url = \Storage::putFileAs('images', $file, $name . '.' . $file->extension());*/
-
-        /*$product = Product::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'image' => env('APP_URL') .  '/' . $url,
-            'price' => $request->input('price'),
-        ]);*/
+        \Gate::authorize('edit', 'products');
 
         $product = Product::create($request->only('title', 'description', 'image', 'price'));
 
@@ -44,6 +38,8 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+        \Gate::authorize('edit', 'products');
+
         $product = Product::find($id);
 
         $product->update($request->only('title', 'description', 'image', 'price'));
@@ -53,6 +49,8 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
+        \Gate::authorize('edit', 'products');
+
         Product::destroy($id);
 
         return response(null, Response::HTTP_NO_CONTENT);

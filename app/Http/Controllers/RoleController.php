@@ -12,12 +12,15 @@ class RoleController extends Controller
 {
     public function index()
     {
-        /*return Role::all();*/
+        \Gate::authorize('view', 'roles');
+
         return RoleResource::collection(Role::all());
     }
 
     public function store(Request $request)
     {
+        \Gate::authorize('edit', 'roles');
+
         $role = Role::create($request->only('name'));
 
         if ($permissions = $request->input('permissions')) {
@@ -29,18 +32,20 @@ class RoleController extends Controller
             }
         }
 
-        /*return response($role, Response::HTTP_CREATED);*/
         return response(new RoleResource($role), Response::HTTP_CREATED);
     }
 
     public function show($id)
     {
-        /*return Role::find($id);*/
+        \Gate::authorize('view', 'roles');
+
         return new RoleResource(Role::find($id));
     }
 
     public function update(Request $request, $id)
     {
+        \Gate::authorize('edit', 'roles');
+
         $role = Role::find($id);
 
         $role->update($request->only('name'));
@@ -56,12 +61,13 @@ class RoleController extends Controller
             }
         }
 
-        /*return response($role, Response::HTTP_ACCEPTED);*/
         return response(new RoleResource($role), Response::HTTP_ACCEPTED);
     }
 
     public function destroy($id)
     {
+        \Gate::authorize('edit', 'roles');
+
         \DB::table('role_permission')->where('role_id', $id)->delete();
 
         Role::destroy($id);
