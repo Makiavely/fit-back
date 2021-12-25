@@ -13,8 +13,8 @@ class UserCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        /*return false;*/
-        return true;
+        /*return true;*/
+        return \Gate::allows('edit', 'users');
     }
 
     /**
@@ -28,6 +28,7 @@ class UserCreateRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email',
+            'role_id' => 'required',
         ];
     }
 }

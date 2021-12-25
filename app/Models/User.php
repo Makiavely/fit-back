@@ -36,14 +36,33 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $role_id
+ * @property-read \App\Models\Role $role
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, HasFactory;
 
     protected $guarded = ['id'];
 
     protected $hidden = [
         'password',        // we donn't wanna show password when we pass in
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function permissions()
+    {
+        return $this->role->permissions->pluck('name');
+    }
+
+    public function hasAccess($access)
+    {
+        return $this->permissions()->contains($access);
+    }
 }
